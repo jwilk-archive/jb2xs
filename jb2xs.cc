@@ -7,6 +7,7 @@
 #include <clocale>
 #include <sstream>
 #include <iomanip>
+#include <iostream>
 
 int main(int argc, char * const argv[])
 {
@@ -24,22 +25,24 @@ int main(int argc, char * const argv[])
     GP<JB2Image> jimg = JB2Image::create();
     jimg->decode(ibs);
     int shape_count = jimg->get_shape_count();
+    std::cout 
+      << "digraph shapes {" << std::endl
+      << "\tgraph [overlap=false]" << std::endl
+      << "\tnode [color=\"#ff0000\"]" << std::endl;
     for (int i = 0; i < shape_count; i++)
     {
       std::ostringstream sstream;
       sstream << std::setw(6) << std::setfill('0') << i << ".pbm";
-      const GURL::Filename::UTF8 url(sstream.str().c_str());
+      std::string file_name = sstream.str();
+      const GURL::Filename::UTF8 url(file_name.c_str());
       GP<ByteStream> obs = ByteStream::create(url, "wb");
       JB2Shape &shape = jimg->get_shape(i);
+      if (shape.parent >= 0)
+        std::cout << "\tshape" << i << " -> shape" << shape.parent << ";" << std::endl;
+      std::cout << "\tshape" << i << " [shapefile=\"" << file_name << "\", label=\"\"]" << std::endl;
       shape.bits->save_pbm(*obs);
     }
-    int blit_count = jimg->get_blit_count();
-    printf(">> %d\n", blit_count);
-    for (int i = 0; i < blit_count; i++)
-    {
-      const JB2Blit *blit = jimg->get_blit(i);
-      printf("%d\n", blit->shapeno);
-    }
+    std::cout << "}" << std::endl;
   }
   G_CATCH(ex)
   {
