@@ -11,10 +11,10 @@
 
 int main(int argc, char * const argv[])
 {
-  setlocale(LC_ALL,"");
+  setlocale(LC_ALL, "");
   djvu_programname(argv[0]);
   GArray<GUTF8String> dargv(0, argc - 1);
-  for(int i=0;i<argc;++i)
+  for(int i=0; i < argc; i++)
     dargv[i] = GNativeString(argv[i]);
   G_TRY
   {
