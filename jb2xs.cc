@@ -25,10 +25,6 @@ int main(int argc, char * const argv[])
     GP<JB2Image> jimg = JB2Image::create();
     jimg->decode(ibs);
     int shape_count = jimg->get_shape_count();
-    std::cout 
-      << "digraph shapes {" << std::endl
-      << "\tgraph [overlap=false]" << std::endl
-      << "\tnode [color=\"#ff0000\"]" << std::endl;
     for (int i = 0; i < shape_count; i++)
     {
       std::ostringstream sstream;
@@ -38,11 +34,9 @@ int main(int argc, char * const argv[])
       GP<ByteStream> obs = ByteStream::create(url, "wb");
       JB2Shape &shape = jimg->get_shape(i);
       if (shape.parent >= 0)
-        std::cout << "\tshape" << i << " -> shape" << shape.parent << ";" << std::endl;
-      std::cout << "\tshape" << i << " [shapefile=\"" << file_name << "\", label=\"\"]" << std::endl;
+        std::cout << i << "\t" << shape.parent << std::endl;
       shape.bits->save_pbm(*obs);
     }
-    std::cout << "}" << std::endl;
   }
   G_CATCH(ex)
   {

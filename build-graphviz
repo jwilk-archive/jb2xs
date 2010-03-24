@@ -1,0 +1,55 @@
+#!/usr/bin/python
+
+from __future__ import with_statement
+
+import sys
+import itertools
+
+from pprint import pprint
+
+nodes = set()
+
+PARENT = {}
+SPARENT = {}
+
+for line in sys.stdin:
+    x, y = map(int, line.split())
+    PARENT[x] = y
+    nodes.add(x)
+    nodes.add(y)
+    z = y
+    while z in SPARENT:
+        z = SPARENT[z]
+    SPARENT[x] = superparent = z
+    z = y
+    while y in SPARENT:
+        z = SPARENT[y]
+        SPARENT[y] = superparent
+        y = z
+
+second = lambda (x, y): y
+groups = [
+    frozenset([superparent] + [node for (node, _) in nodes])
+    for superparent, nodes in itertools.groupby(sorted(SPARENT.items(), key=second), second)
+]
+groups.sort(key=len)
+
+last_size = None
+last_id = 0
+for group in groups:
+    if len(group) != last_size:
+        last_id = 0
+    with open('S%04d.%04d.dot' % (len(group), last_id), 'w') as file:
+        print >>file, 'digraph shapes {'
+        print >>file, '\tgraph [overlap=false]'
+        print >>file, '\tnode [color="#ff0000"]'
+        for i in group:
+            if i in PARENT:
+                print >>file, '\tshape%d -> shape%d' % (i, PARENT[i])
+            print >>file, '\tshape%d [shapefile="%06d.png", label=\"\"]' % (i, i)
+        print >>file, '}'
+
+    last_size = len(group)
+    last_id += 1
+
+# vim:ts=4 sw=4 et
