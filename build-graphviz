@@ -27,7 +27,8 @@ for line in sys.stdin:
         SPARENT[y] = superparent
         y = z
 
-second = lambda (x, y): y
+def second(t):
+    return t[1]
 groups = [
     frozenset([superparent] + [node for (node, _) in nodes])
     for superparent, nodes in itertools.groupby(sorted(SPARENT.items(), key=second), second)
