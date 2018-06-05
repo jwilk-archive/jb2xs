@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+from __future__ import print_function
+
 import sys
 import itertools
 
@@ -39,14 +41,14 @@ for group in groups:
     if len(group) != last_size:
         last_id = 0
     with open('S%04d.%04d.dot' % (len(group), last_id), 'w') as file:
-        print >>file, 'digraph shapes {'
-        print >>file, '\tgraph [overlap=false]'
-        print >>file, '\tnode [color="#ff0000"]'
+        print('digraph shapes {', file=file)
+        print('\tgraph [overlap=false]', file=file)
+        print('\tnode [color="#ff0000"]', file=file)
         for i in group:
             if i in PARENT:
-                print >>file, '\tshape%d -> shape%d' % (i, PARENT[i])
-            print >>file, '\tshape%d [shapefile="%06d.png", label=\"\"]' % (i, i)
-        print >>file, '}'
+                print('\tshape%d -> shape%d' % (i, PARENT[i]), file=file)
+            print('\tshape%d [shapefile="%06d.png", label=\"\"]' % (i, i), file=file)
+        print('}', file=file)
 
     last_size = len(group)
     last_id += 1
