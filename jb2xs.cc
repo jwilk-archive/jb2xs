@@ -1,3 +1,7 @@
+/* Copyright © 2007-2018 Jakub Wilk <jwilk@jwilk.net>
+ * SPDX-License-Identifier: MIT
+ */
+
 #include <JB2Image.h>
 #include <GURL.h>
 #include <ByteStream.h>
