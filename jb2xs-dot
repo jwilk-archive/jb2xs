@@ -5,8 +5,6 @@ from __future__ import print_function
 import sys
 import itertools
 
-from pprint import pprint
-
 nodes = set()
 
 PARENT = {}
